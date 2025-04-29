@@ -4,6 +4,8 @@ const sequelize = require('../../config/sql'); // Sequelize config file
 const SQLUser = sequelize.define('SQLUser', {
   username: { type: DataTypes.STRING, allowNull: false, unique: true },
   email:    { type: DataTypes.STRING, allowNull: false, unique: true },
+  age: {type: DataTypes.INTEGER,allowNull:false,unique:true},
+  
   password: { type: DataTypes.STRING, allowNull: false },
   isVerified: { type: DataTypes.BOOLEAN, defaultValue: false },
   verificationToken: { type: DataTypes.STRING, allowNull: true },

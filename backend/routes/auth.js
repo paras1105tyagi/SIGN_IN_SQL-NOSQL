@@ -13,7 +13,7 @@ const {
 
 // Signup Route
 router.post("/signup", async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, age } = req.body;
 
   try {
     const existingUser = await User.findOne({ email });
@@ -30,6 +30,7 @@ router.post("/signup", async (req, res) => {
       username, 
       email, 
       password: hashedPassword,
+      age,
       verificationToken,
       verificationTokenExpires,
       isVerified: false
@@ -41,6 +42,7 @@ router.post("/signup", async (req, res) => {
       username, 
       email, 
       password: hashedPassword,
+      age,
       verificationToken,
       verificationTokenExpires,
       isVerified: false

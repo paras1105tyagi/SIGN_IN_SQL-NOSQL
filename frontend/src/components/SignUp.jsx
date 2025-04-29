@@ -5,7 +5,7 @@ import './Auth.css';
 
 function SignUp() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ username: '', email: '', password: '', confirmPassword: '' });
+  const [formData, setFormData] = useState({ username: '', email: '', password: '', confirmPassword: '', age: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -30,6 +30,14 @@ function SignUp() {
       setLoading(false);
       return;
     }
+
+    // Validate age
+    const age = parseInt(formData.age);
+    if (isNaN(age) || age < 0 || age > 120) {
+      setError('Please enter a valid age between 0 and 120');
+      setLoading(false);
+      return;
+    }
     
     try {
       const res = await fetch('http://localhost:5000/api/auth/signup', {
@@ -38,7 +46,8 @@ function SignUp() {
         body: JSON.stringify({
           username: formData.username,
           email: formData.email,
-          password: formData.password
+          password: formData.password,
+          age: age
         }),
       });
 
@@ -48,7 +57,7 @@ function SignUp() {
         setSuccess('Account created successfully! Please check your email for verification instructions.');
         
         // Clear form
-        setFormData({ username: '', email: '', password: '', confirmPassword: '' });
+        setFormData({ username: '', email: '', password: '', confirmPassword: '', age: '' });
         
         // Redirect after a delay
         setTimeout(() => {
@@ -100,6 +109,21 @@ function SignUp() {
               required
             />
           </div>
+
+          <div className="input-group">
+            <label htmlFor="age">Age</label>
+            <input
+              id="age"
+              type="number"
+              name="age"
+              value={formData.age}
+              onChange={handleChange}
+              placeholder="Enter your age"
+              min="0"
+              max="120"
+              required
+            />
+          </div>
           
           <div className="input-group">
             <label htmlFor="password">Password</label>
@@ -127,18 +151,14 @@ function SignUp() {
             />
           </div>
           
-          <button 
-            type="submit" 
-            className="button-primary" 
-            disabled={loading}
-          >
-            {loading ? 'Creating Account...' : 'Sign Up'}
+          <button type="submit" disabled={loading} className="auth-button">
+            {loading ? 'Creating Account...' : 'Create Account'}
           </button>
+          
+          <p className="auth-link">
+            Already have an account? <Link to="/signin">Sign In</Link>
+          </p>
         </form>
-        
-        <p className="auth-footer">
-          Already have an account? <Link to="/signin">Sign In</Link>
-        </p>
       </div>
     </div>
   );
